@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# mssh
+# Easily connect to multiple SSH hosts and synchronise commands
+
+starttmux() {
+    local hosts=( $HOSTS )
+
+    tmux new-window "ssh ${hosts[0]}"
+    unset "hosts[0]";
+
+    for i in "${hosts[@]}"; do
+        tmux split-window -h  "ssh $i"
+        tmux select-layout tiled > /dev/null
+    done
+
+    tmux select-pane -t 0
+    tmux set-window-option synchronize-panes on > /dev/null
+}
+
+main() {
+    HOSTS=""
+
+    # Check to see if a pipe exists on stdin.
+    if [ -p /dev/stdin ]; then
+        # Grab all the data
+        HOSTS=$(cat)
+    else
+        # Checking if any parameters were passed
+        if [ "$#" -gt 0 ]; then
+            HOSTS=${HOSTS:=$*}
+        else # Prompt for hosts
+            echo -n "Enter a list of hosts, separated by spaces: "
+            read -r HOSTS
+        fi
+    fi
+
+    starttmux "$HOSTS"
+}
+
+main "$@"
