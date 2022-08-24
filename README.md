@@ -1,8 +1,16 @@
 # mssh
 
-Easily connect to multiple SSH hosts and synchronise commands.
+Easily connect to multiple SSH hosts and synchronise commands
 
-## Manual installation
+## Installation
+
+Installation using homebrew is recommended.
+
+```
+brew install nick-f/labs/mssh
+```
+
+### Manual installation
 
 - Ensure that `tmux` is installed
 - Clone the repository
